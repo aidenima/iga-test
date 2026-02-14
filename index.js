@@ -50,6 +50,11 @@ function verifySignature(req, res, next) {
 }
 
 app.get("/webhook", (req, res) => {
+  console.log("WEBHOOK_VERIFY", {
+    mode: req.query["hub.mode"],
+    token: req.query["hub.verify_token"] ? "[present]" : "[missing]",
+    challenge: req.query["hub.challenge"] ? "[present]" : "[missing]",
+  });
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
   const challenge = req.query["hub.challenge"];
@@ -60,6 +65,7 @@ app.get("/webhook", (req, res) => {
 });
 
 app.post("/webhook", verifySignature, async (req, res) => {
+  console.log("WEBHOOK_POST", JSON.stringify(req.body || {}));
   const body = req.body;
   if (body.object !== "instagram") {
     return res.sendStatus(404);
