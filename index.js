@@ -99,12 +99,15 @@ async function sendMessage(recipientId, text) {
     return;
   }
   const payload = {
+    messaging_type: "RESPONSE",
     recipient: { id: recipientId },
     message: { text },
   };
 
   const url =
-    "https://graph.facebook.com/v19.0/me/messages?access_token=" +
+    "https://graph.facebook.com/v24.0/" +
+    encodeURIComponent(PAGE_ID || "me") +
+    "/messages?access_token=" +
     encodeURIComponent(PAGE_ACCESS_TOKEN);
 
   const response = await fetch(url, {
